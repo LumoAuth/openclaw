@@ -60,7 +60,11 @@ You need:
 openclaw plugins install npm:@lumoauth/openclaw
 ```
 
-OpenClaw lists what the plugin registers and asks you to accept it.
+OpenClaw asks two questions. Answer `y` to both:
+
+1. **Install this non-ClawHub plugin source?** OpenClaw asks this for every plugin that comes from npm instead of ClawHub.
+2. **Accept these capabilities?** OpenClaw first lists what the plugin registers: the `lumoauth` command and the `lumoauth-guard` skill.
+
 From now until setup finishes, the Guard blocks every tool call. It fails closed on purpose.
 
 ### 2. Run setup
@@ -134,11 +138,11 @@ Then run `openclaw lumoauth status`. It shows the agent, its capabilities, the c
 <br>
 
 ```sh
-openclaw plugins install npm:@lumoauth/openclaw --accept-capabilities
+openclaw plugins install npm:@lumoauth/openclaw --force --accept-capabilities
 openclaw lumoauth setup --url https://app.lumoauth.dev/orgs/acme/portal --preset assistant --approvals auto --yes
 ```
 
-A script cannot answer the install question, so it needs `--accept-capabilities`.
+A script cannot answer the two install questions, so it needs `--force` and `--accept-capabilities`.
 You still approve the agent in LumoAuth: setup prints the link and waits for you.
 
 </details>
