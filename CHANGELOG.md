@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.1.0 (unreleased)
+## Unreleased
+
+## 0.1.0 — 2026-11-20
 
 First release of LumoAuth Guard for OpenClaw (plugin id `lumoauth`), built to the LumoAuth Guard contract v1.
 
