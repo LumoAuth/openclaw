@@ -1,0 +1,404 @@
+{
+  "description": "SPEC §4: (host, tool name, arguments) -> classification. Fields not listed in 'expected' must be false / null / empty. 'paths' are absolute after resolution with the environment of vectors/environment.json. 'dispatchedBy' names the wrapper when the call came through a dispatcher tool (SPEC §4.1a).",
+  "cases": [
+    {
+      "host": "openclaw",
+      "tool": "read",
+      "args": {
+        "path": "notes.md"
+      },
+      "expected": {
+        "capability": "files:read",
+        "risk": "read",
+        "paths": [
+          "/home/ada/.openclaw/workspace/notes.md"
+        ]
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "bash",
+      "args": {
+        "command": "ls -la"
+      },
+      "expected": {
+        "tool": "exec",
+        "capability": "shell:exec",
+        "risk": "execute",
+        "command": "ls -la"
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "cron",
+      "args": {},
+      "expected": {
+        "tool": "automations",
+        "capability": "automations:manage",
+        "risk": "admin"
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "web_fetch",
+      "args": {
+        "url": "https://example.com"
+      },
+      "expected": {
+        "capability": "web:fetch",
+        "risk": "read",
+        "ingestsUntrusted": true,
+        "egress": true
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "personal_instructions",
+      "args": {},
+      "expected": {
+        "capability": "memory:write",
+        "risk": "write",
+        "persistsInstructions": true
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "message",
+      "args": {
+        "to": "alex",
+        "text": "hi"
+      },
+      "expected": {
+        "capability": "messages:send",
+        "risk": "external"
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "github__create_issue",
+      "args": {
+        "title": "Bug"
+      },
+      "expected": {
+        "capability": "mcp:github:write:create_issue",
+        "risk": "write",
+        "server": "github",
+        "mcpTool": "create_issue"
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "github__list_issues",
+      "args": {},
+      "expected": {
+        "capability": "mcp:github:read:list_issues",
+        "risk": "read",
+        "server": "github",
+        "mcpTool": "list_issues",
+        "ingestsUntrusted": true
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "My-Server__Do.Thing",
+      "args": {},
+      "expected": {
+        "capability": "mcp:my-server:execute:do_thing",
+        "risk": "execute",
+        "server": "my-server",
+        "mcpTool": "Do.Thing"
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "acme_widget",
+      "args": {},
+      "expected": {
+        "capability": "tool:acme_widget",
+        "risk": "execute"
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "Acme.Widget",
+      "args": {},
+      "expected": {
+        "capability": "tool:acme_widget",
+        "risk": "execute"
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "plugins",
+      "args": {
+        "action": "disable",
+        "id": "lumoauth"
+      },
+      "expected": {
+        "capability": "host:admin",
+        "risk": "admin",
+        "hardRule": "deny"
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "gateway",
+      "args": {
+        "action": "restart"
+      },
+      "expected": {
+        "capability": "host:admin",
+        "risk": "admin",
+        "hardRule": "approve"
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "gateway",
+      "args": {
+        "action": "config.get"
+      },
+      "expected": {
+        "capability": "host:admin",
+        "risk": "admin"
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "apply_patch",
+      "args": {
+        "input": "*** Begin Patch\n*** Update File: src/app.ts\n@@\n-a\n+b\n*** Add File: /tmp/new.txt\n+x\n*** End Patch"
+      },
+      "expected": {
+        "capability": "files:write",
+        "risk": "write",
+        "paths": [
+          "/home/ada/.openclaw/workspace/src/app.ts",
+          "/tmp/new.txt"
+        ]
+      }
+    },
+    {
+      "host": "hermes",
+      "tool": "terminal",
+      "args": {
+        "command": "git status",
+        "workdir": "/home/ada/src/app"
+      },
+      "expected": {
+        "capability": "shell:exec",
+        "risk": "execute",
+        "command": "git status",
+        "paths": [
+          "/home/ada/src/app"
+        ]
+      }
+    },
+    {
+      "host": "hermes",
+      "tool": "read_file",
+      "args": {
+        "path": "~/notes/todo.md"
+      },
+      "expected": {
+        "capability": "files:read",
+        "risk": "read",
+        "paths": [
+          "/home/ada/notes/todo.md"
+        ]
+      }
+    },
+    {
+      "host": "hermes",
+      "tool": "mcp__github__list_issues",
+      "args": {},
+      "expected": {
+        "capability": "mcp:github:read:list_issues",
+        "risk": "read",
+        "server": "github",
+        "mcpTool": "list_issues",
+        "ingestsUntrusted": true
+      }
+    },
+    {
+      "host": "hermes",
+      "tool": "mcp__gmail__send_email",
+      "args": {
+        "to": "a@example.com"
+      },
+      "expected": {
+        "capability": "mcp:gmail:external:send_email",
+        "risk": "external",
+        "server": "gmail",
+        "mcpTool": "send_email"
+      }
+    },
+    {
+      "host": "hermes",
+      "tool": "mcp__a__b__c",
+      "args": {},
+      "expected": {
+        "capability": "mcp:a:execute:b__c",
+        "risk": "execute",
+        "server": "a",
+        "mcpTool": "b__c"
+      }
+    },
+    {
+      "host": "hermes",
+      "tool": "cronjob",
+      "args": {},
+      "expected": {
+        "tool": "cronjob_manage",
+        "capability": "automations:manage",
+        "risk": "admin"
+      }
+    },
+    {
+      "host": "hermes",
+      "tool": "kanban_move_card",
+      "args": {},
+      "expected": {
+        "capability": "tasks:write",
+        "risk": "write"
+      }
+    },
+    {
+      "host": "hermes",
+      "tool": "ha_turn_on",
+      "args": {},
+      "expected": {
+        "capability": "devices:control",
+        "risk": "admin"
+      }
+    },
+    {
+      "host": "hermes",
+      "tool": "skill_manage",
+      "args": {
+        "action": "view",
+        "name": "x"
+      },
+      "expected": {
+        "capability": "skills:write",
+        "risk": "admin",
+        "persistsInstructions": true
+      }
+    },
+    {
+      "host": "hermes",
+      "tool": "skill_manage",
+      "args": {
+        "action": "create",
+        "name": "x"
+      },
+      "expected": {
+        "capability": "skills:write",
+        "risk": "admin",
+        "persistsInstructions": true,
+        "hardRule": "approve"
+      }
+    },
+    {
+      "host": "hermes",
+      "tool": "memory",
+      "args": {
+        "action": "add",
+        "content": "x"
+      },
+      "expected": {
+        "capability": "memory:write",
+        "risk": "write",
+        "persistsInstructions": true
+      }
+    },
+    {
+      "host": "hermes",
+      "tool": "execute_code",
+      "args": {
+        "code": "print(1)"
+      },
+      "expected": {
+        "capability": "code:execute",
+        "risk": "execute",
+        "command": "print(1)"
+      }
+    },
+    {
+      "host": "hermes",
+      "tool": "some_plugin_tool",
+      "args": {},
+      "expected": {
+        "capability": "tool:some_plugin_tool",
+        "risk": "execute"
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "dispatch_action",
+      "args": {
+        "id": "web_fetch",
+        "args": {
+          "url": "https://example.com"
+        }
+      },
+      "expected": {
+        "tool": "web_fetch",
+        "capability": "web:fetch",
+        "risk": "read",
+        "ingestsUntrusted": true,
+        "egress": true,
+        "dispatchedBy": "dispatch_action"
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "dispatch_action",
+      "args": {
+        "id": "read",
+        "args": {
+          "path": "notes.md"
+        }
+      },
+      "expected": {
+        "tool": "read",
+        "capability": "files:read",
+        "risk": "read",
+        "paths": [
+          "/home/ada/.openclaw/workspace/notes.md"
+        ],
+        "dispatchedBy": "dispatch_action"
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "dispatch_action",
+      "args": {
+        "args": {}
+      },
+      "expected": {
+        "tool": "dispatch_action",
+        "capability": "tool:dispatch_action",
+        "risk": "execute"
+      }
+    },
+    {
+      "host": "openclaw",
+      "tool": "dispatch_action",
+      "args": {
+        "id": "openclaw:core:web_fetch",
+        "args": {
+          "url": "https://example.com"
+        }
+      },
+      "expected": {
+        "tool": "web_fetch",
+        "capability": "web:fetch",
+        "risk": "read",
+        "ingestsUntrusted": true,
+        "egress": true,
+        "dispatchedBy": "dispatch_action"
+      }
+    }
+  ]
+}

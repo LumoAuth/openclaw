@@ -1,0 +1,513 @@
+{
+  "$comment": "OpenClaw built-in tools (src/agents/core-tool-facts.ts, OpenClaw 2026.11.5) and how the Guard classifies them (SPEC §4). pathArgs/commandArgs/patchArgs name the arguments that the hard rules read; OpenClaw's derivedPaths are added. A name that ends in '*' is a prefix. A tool that is not listed is classified tool:<name> with risk execute.",
+  "host": "openclaw",
+  "verifiedAgainst": "openclaw 2026.11.5",
+  "aliases": {
+    "bash": "exec",
+    "apply-patch": "apply_patch",
+    "cron": "automations",
+    "tool_call": "dispatch_action"
+  },
+  "mcp": {
+    "separator": "__",
+    "prefix": ""
+  },
+  "tools": [
+    {
+      "name": "ls",
+      "capability": "files:read",
+      "risk": "read",
+      "pathArgs": [
+        "path",
+        "dir",
+        "directory"
+      ]
+    },
+    {
+      "name": "read",
+      "capability": "files:read",
+      "risk": "read",
+      "pathArgs": [
+        "path",
+        "file_path",
+        "filePath",
+        "file"
+      ]
+    },
+    {
+      "name": "search",
+      "capability": "files:read",
+      "risk": "read",
+      "pathArgs": [
+        "path",
+        "cwd",
+        "dir"
+      ]
+    },
+    {
+      "name": "find",
+      "capability": "files:read",
+      "risk": "read",
+      "pathArgs": [
+        "path",
+        "cwd",
+        "dir"
+      ]
+    },
+    {
+      "name": "grep",
+      "capability": "files:read",
+      "risk": "read",
+      "pathArgs": [
+        "path",
+        "cwd",
+        "dir"
+      ]
+    },
+    {
+      "name": "glob",
+      "capability": "files:read",
+      "risk": "read",
+      "pathArgs": [
+        "path",
+        "cwd",
+        "dir"
+      ]
+    },
+    {
+      "name": "write",
+      "capability": "files:write",
+      "risk": "write",
+      "pathArgs": [
+        "path",
+        "file_path",
+        "filePath",
+        "file"
+      ]
+    },
+    {
+      "name": "edit",
+      "capability": "files:write",
+      "risk": "write",
+      "pathArgs": [
+        "path",
+        "file_path",
+        "filePath",
+        "file"
+      ]
+    },
+    {
+      "name": "apply_patch",
+      "capability": "files:write",
+      "risk": "write",
+      "patchArgs": [
+        "input",
+        "patch"
+      ]
+    },
+    {
+      "name": "exec",
+      "capability": "shell:exec",
+      "risk": "execute",
+      "commandArgs": [
+        "command",
+        "cmd",
+        "script"
+      ],
+      "pathArgs": [
+        "cwd",
+        "workdir"
+      ]
+    },
+    {
+      "name": "terminal",
+      "capability": "shell:exec",
+      "risk": "execute",
+      "commandArgs": [
+        "command",
+        "cmd",
+        "input"
+      ],
+      "pathArgs": [
+        "cwd",
+        "workdir"
+      ]
+    },
+    {
+      "name": "process",
+      "capability": "process:manage",
+      "risk": "execute",
+      "commandArgs": [
+        "command",
+        "input",
+        "data"
+      ]
+    },
+    {
+      "name": "code_execution",
+      "capability": "code:execute",
+      "risk": "execute",
+      "commandArgs": [
+        "code",
+        "source",
+        "script"
+      ]
+    },
+    {
+      "name": "secrets",
+      "capability": "secrets:read",
+      "risk": "admin",
+      "hardRule": "approve"
+    },
+    {
+      "name": "web_search",
+      "capability": "web:search",
+      "risk": "read",
+      "ingestsUntrusted": true
+    },
+    {
+      "name": "x_search",
+      "capability": "web:search",
+      "risk": "read",
+      "ingestsUntrusted": true
+    },
+    {
+      "name": "web_fetch",
+      "capability": "web:fetch",
+      "risk": "read",
+      "ingestsUntrusted": true,
+      "egress": true
+    },
+    {
+      "name": "browser",
+      "capability": "browser:use",
+      "risk": "external",
+      "ingestsUntrusted": true,
+      "egress": true
+    },
+    {
+      "name": "memory_search",
+      "capability": "memory:read",
+      "risk": "read"
+    },
+    {
+      "name": "memory_get",
+      "capability": "memory:read",
+      "risk": "read"
+    },
+    {
+      "name": "personal_instructions",
+      "capability": "memory:write",
+      "risk": "write",
+      "persistsInstructions": true
+    },
+    {
+      "name": "presence",
+      "capability": "sessions:read",
+      "risk": "read"
+    },
+    {
+      "name": "sessions",
+      "capability": "sessions:manage",
+      "risk": "write"
+    },
+    {
+      "name": "sessions_create",
+      "capability": "sessions:manage",
+      "risk": "write"
+    },
+    {
+      "name": "sessions_list",
+      "capability": "sessions:read",
+      "risk": "read"
+    },
+    {
+      "name": "sessions_history",
+      "capability": "sessions:read",
+      "risk": "read",
+      "ingestsUntrusted": true
+    },
+    {
+      "name": "sessions_search",
+      "capability": "sessions:read",
+      "risk": "read",
+      "ingestsUntrusted": true
+    },
+    {
+      "name": "session_status",
+      "capability": "sessions:read",
+      "risk": "read"
+    },
+    {
+      "name": "sessions_yield",
+      "capability": "sessions:manage",
+      "risk": "write"
+    },
+    {
+      "name": "conversations_list",
+      "capability": "sessions:read",
+      "risk": "read"
+    },
+    {
+      "name": "conversations_send",
+      "capability": "messages:send",
+      "risk": "external"
+    },
+    {
+      "name": "conversations_turn",
+      "capability": "messages:send",
+      "risk": "external"
+    },
+    {
+      "name": "sessions_send",
+      "capability": "messages:send",
+      "risk": "external"
+    },
+    {
+      "name": "message",
+      "capability": "messages:send",
+      "risk": "external"
+    },
+    {
+      "name": "sessions_spawn",
+      "capability": "agents:spawn",
+      "risk": "execute"
+    },
+    {
+      "name": "subagents",
+      "capability": "agents:spawn",
+      "risk": "execute"
+    },
+    {
+      "name": "agents_wait",
+      "capability": "agents:read",
+      "risk": "read"
+    },
+    {
+      "name": "agents_list",
+      "capability": "agents:read",
+      "risk": "read"
+    },
+    {
+      "name": "decision_evaluate",
+      "capability": "agents:read",
+      "risk": "read"
+    },
+    {
+      "name": "get_goal",
+      "capability": "agents:read",
+      "risk": "read"
+    },
+    {
+      "name": "create_goal",
+      "capability": "goals:write",
+      "risk": "write"
+    },
+    {
+      "name": "update_goal",
+      "capability": "goals:write",
+      "risk": "write"
+    },
+    {
+      "name": "suggest_task",
+      "capability": "goals:write",
+      "risk": "write"
+    },
+    {
+      "name": "dismiss_task",
+      "capability": "goals:write",
+      "risk": "write"
+    },
+    {
+      "name": "ask_user",
+      "capability": "user:ask",
+      "risk": "read"
+    },
+    {
+      "name": "tool_search",
+      "capability": "tools:read",
+      "risk": "read"
+    },
+    {
+      "name": "tool_describe",
+      "capability": "tools:read",
+      "risk": "read"
+    },
+    {
+      "name": "structured_output",
+      "capability": "tools:read",
+      "risk": "read"
+    },
+    {
+      "name": "progress_card",
+      "capability": "ui:write",
+      "risk": "write"
+    },
+    {
+      "name": "theme",
+      "capability": "ui:write",
+      "risk": "write"
+    },
+    {
+      "name": "dashboard",
+      "capability": "ui:write",
+      "risk": "write"
+    },
+    {
+      "name": "portal",
+      "capability": "ui:write",
+      "risk": "write"
+    },
+    {
+      "name": "canvas",
+      "capability": "ui:write",
+      "risk": "write"
+    },
+    {
+      "name": "show_widget",
+      "capability": "ui:write",
+      "risk": "write"
+    },
+    {
+      "name": "screen",
+      "capability": "media:read",
+      "risk": "read"
+    },
+    {
+      "name": "view_image",
+      "capability": "media:read",
+      "risk": "read",
+      "ingestsUntrusted": true,
+      "pathArgs": [
+        "path",
+        "image"
+      ]
+    },
+    {
+      "name": "transcripts",
+      "capability": "media:read",
+      "risk": "read",
+      "ingestsUntrusted": true
+    },
+    {
+      "name": "pdf",
+      "capability": "media:read",
+      "risk": "read",
+      "ingestsUntrusted": true,
+      "pathArgs": [
+        "path",
+        "file"
+      ]
+    },
+    {
+      "name": "image_generate",
+      "capability": "media:generate",
+      "risk": "write"
+    },
+    {
+      "name": "music_generate",
+      "capability": "media:generate",
+      "risk": "write"
+    },
+    {
+      "name": "video_generate",
+      "capability": "media:generate",
+      "risk": "write"
+    },
+    {
+      "name": "tts",
+      "capability": "media:generate",
+      "risk": "write"
+    },
+    {
+      "name": "skill_library",
+      "capability": "skills:read",
+      "risk": "read"
+    },
+    {
+      "name": "skills_search",
+      "capability": "skills:read",
+      "risk": "read"
+    },
+    {
+      "name": "skills_read",
+      "capability": "skills:read",
+      "risk": "read"
+    },
+    {
+      "name": "skill_workshop",
+      "capability": "skills:write",
+      "risk": "admin",
+      "hardRule": "approve",
+      "persistsInstructions": true
+    },
+    {
+      "name": "automations",
+      "capability": "automations:manage",
+      "risk": "admin"
+    },
+    {
+      "name": "gateway",
+      "capability": "host:admin",
+      "risk": "admin",
+      "hardRuleActions": {
+        "argument": "action",
+        "approve": [
+          "update.run",
+          "restart",
+          "update.cleanup"
+        ]
+      }
+    },
+    {
+      "name": "openclaw",
+      "capability": "host:admin",
+      "risk": "admin",
+      "hardRule": "approve"
+    },
+    {
+      "name": "plugins",
+      "capability": "host:admin",
+      "risk": "admin",
+      "hardRule": "deny"
+    },
+    {
+      "name": "nodes",
+      "capability": "devices:control",
+      "risk": "admin"
+    },
+    {
+      "name": "computer",
+      "capability": "devices:control",
+      "risk": "admin"
+    },
+    {
+      "name": "mobile_ui",
+      "capability": "devices:control",
+      "risk": "admin"
+    },
+    {
+      "name": "github_identity_status",
+      "capability": "github:read",
+      "risk": "read"
+    },
+    {
+      "name": "github_publish",
+      "capability": "github:publish",
+      "risk": "external"
+    },
+    {
+      "name": "dispatch_action",
+      "capability": "tool:dispatch_action",
+      "risk": "execute",
+      "dispatcher": {
+        "nameArgs": [
+          "id",
+          "name",
+          "tool"
+        ],
+        "argsArg": "args"
+      }
+    }
+  ]
+}

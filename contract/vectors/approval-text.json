@@ -1,0 +1,66 @@
+{
+  "description": "SPEC §6.4: approval title and description. Lines are joined with '\\n'. Argument lines: command arguments first (whole command, cut to 240), then the other arguments sorted by name, at most 5 argument lines in total; values are strings as given, other JSON values compact JSON; newlines become '⏎'; a value longer than its limit (80, or 240 for a command) becomes its first limit-1 characters + '…'; an argument whose name contains (case-insensitive) password, secret, token, key, auth, cookie or credential shows '[hidden]'. The description is cut the same way to 480. Title: 'Allow <tool>?' or 'Allow <mcpTool> on <server>?', cut to 80. 'why' is the reason text of vectors/decide.json.",
+  "cases": [
+    {
+      "id": "shell-not-granted",
+      "classification": { "tool": "exec", "capability": "shell:exec", "risk": "execute", "command": "rm -rf build && npm run build" },
+      "args": { "command": "rm -rf build && npm run build", "cwd": "/home/ada/app" },
+      "why": "Not granted to this agent",
+      "expected": {
+        "title": "Allow exec?",
+        "description": "Why: Not granted to this agent\nCapability: shell:exec\nRisk: execute\ncommand: rm -rf build && npm run build\ncwd: /home/ada/app",
+        "impact": "high",
+        "severity": "warning"
+      }
+    },
+    {
+      "id": "mcp-send-hidden-token",
+      "classification": { "tool": "gmail__send_email", "capability": "mcp:gmail:external:send_email", "risk": "external", "server": "gmail", "mcpTool": "send_email" },
+      "args": { "to": "alex@example.com", "subject": "Report", "body": "Hi Alex,\nhere it is.", "apiKey": "sk-123", "access_token": "abc" },
+      "why": "After the agent read untrusted content",
+      "expected": {
+        "title": "Allow send_email on gmail?",
+        "description": "Why: After the agent read untrusted content\nCapability: mcp:gmail:external:send_email\nRisk: external\naccess_token: [hidden]\napiKey: [hidden]\nbody: Hi Alex,⏎here it is.\nsubject: Report\nto: alex@example.com",
+        "impact": "high",
+        "severity": "warning"
+      }
+    },
+    {
+      "id": "long-value-cut",
+      "classification": { "tool": "write", "capability": "files:write", "risk": "write" },
+      "args": { "path": "/home/ada/notes.md", "content": "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" },
+      "why": "Not granted to this agent",
+      "expected": {
+        "title": "Allow write?",
+        "description": "Why: Not granted to this agent\nCapability: files:write\nRisk: write\ncontent: 0123456789012345678901234567890123456789012345678901234567890123456789012345678…\npath: /home/ada/notes.md",
+        "impact": "medium",
+        "severity": "info"
+      }
+    },
+    {
+      "id": "six-args-five-shown",
+      "classification": { "tool": "acme", "capability": "tool:acme", "risk": "execute" },
+      "args": { "f": 6, "e": 5, "d": 4, "c": 3, "b": 2, "a": { "x": [1, true, null] } },
+      "why": "Not granted to this agent",
+      "expected": {
+        "title": "Allow acme?",
+        "description": "Why: Not granted to this agent\nCapability: tool:acme\nRisk: execute\na: {\"x\":[1,true,null]}\nb: 2\nc: 3\nd: 4\ne: 5",
+        "impact": "high",
+        "severity": "warning"
+      }
+    },
+    {
+      "id": "hard-rule-critical",
+      "classification": { "tool": "read", "capability": "files:read", "risk": "read" },
+      "args": { "path": "/home/ada/app/.env" },
+      "hardRule": "approve",
+      "why": "Touches something protected",
+      "expected": {
+        "title": "Allow read?",
+        "description": "Why: Touches something protected\nCapability: files:read\nRisk: read\npath: /home/ada/app/.env",
+        "impact": "low",
+        "severity": "critical"
+      }
+    }
+  ]
+}

@@ -1,0 +1,291 @@
+{
+  "$comment": "Hermes Agent built-in tools (toolsets.py, main 2026-11-19) and how the Guard classifies them (SPEC §4). A name that ends in '*' is a prefix. A tool that is not listed is classified tool:<name> with risk execute.",
+  "host": "hermes",
+  "verifiedAgainst": "hermes-agent main 2026-11-19 (bb13381)",
+  "aliases": {
+    "cronjob": "cronjob_manage",
+    "process": "process_manage",
+    "todo": "todo_list",
+    "tour": "gui_tour",
+    "tip": "show_tip"
+  },
+  "mcp": {
+    "separator": "__",
+    "prefix": "mcp__"
+  },
+  "tools": [
+    {
+      "name": "read_file",
+      "capability": "files:read",
+      "risk": "read",
+      "pathArgs": [
+        "path"
+      ]
+    },
+    {
+      "name": "search_files",
+      "capability": "files:read",
+      "risk": "read",
+      "pathArgs": [
+        "path",
+        "directory",
+        "cwd"
+      ]
+    },
+    {
+      "name": "write_file",
+      "capability": "files:write",
+      "risk": "write",
+      "pathArgs": [
+        "path"
+      ]
+    },
+    {
+      "name": "patch",
+      "capability": "files:write",
+      "risk": "write",
+      "pathArgs": [
+        "path"
+      ],
+      "patchArgs": [
+        "patch"
+      ]
+    },
+    {
+      "name": "terminal",
+      "capability": "shell:exec",
+      "risk": "execute",
+      "commandArgs": [
+        "command"
+      ],
+      "pathArgs": [
+        "workdir"
+      ]
+    },
+    {
+      "name": "read_terminal",
+      "capability": "shell:read",
+      "risk": "read",
+      "ingestsUntrusted": true
+    },
+    {
+      "name": "close_terminal",
+      "capability": "process:manage",
+      "risk": "execute"
+    },
+    {
+      "name": "process_manage",
+      "capability": "process:manage",
+      "risk": "execute",
+      "commandArgs": [
+        "command",
+        "input",
+        "data"
+      ]
+    },
+    {
+      "name": "execute_code",
+      "capability": "code:execute",
+      "risk": "execute",
+      "commandArgs": [
+        "code"
+      ]
+    },
+    {
+      "name": "web_search",
+      "capability": "web:search",
+      "risk": "read",
+      "ingestsUntrusted": true
+    },
+    {
+      "name": "x_search",
+      "capability": "web:search",
+      "risk": "read",
+      "ingestsUntrusted": true
+    },
+    {
+      "name": "web_extract",
+      "capability": "web:fetch",
+      "risk": "read",
+      "ingestsUntrusted": true,
+      "egress": true
+    },
+    {
+      "name": "browser_exec",
+      "capability": "browser:use",
+      "risk": "external",
+      "ingestsUntrusted": true,
+      "egress": true
+    },
+    {
+      "name": "browser_cdp",
+      "capability": "browser:use",
+      "risk": "external",
+      "ingestsUntrusted": true,
+      "egress": true
+    },
+    {
+      "name": "browser_dialog",
+      "capability": "browser:use",
+      "risk": "external",
+      "ingestsUntrusted": true,
+      "egress": true
+    },
+    {
+      "name": "browser_vault",
+      "capability": "secrets:read",
+      "risk": "admin",
+      "hardRule": "approve"
+    },
+    {
+      "name": "vision_analyze",
+      "capability": "media:read",
+      "risk": "read",
+      "ingestsUntrusted": true,
+      "pathArgs": [
+        "image_url",
+        "path"
+      ]
+    },
+    {
+      "name": "video_analyze",
+      "capability": "media:read",
+      "risk": "read",
+      "ingestsUntrusted": true
+    },
+    {
+      "name": "image_generate",
+      "capability": "media:generate",
+      "risk": "write"
+    },
+    {
+      "name": "video_generate",
+      "capability": "media:generate",
+      "risk": "write"
+    },
+    {
+      "name": "text_to_speech",
+      "capability": "media:generate",
+      "risk": "write"
+    },
+    {
+      "name": "skills_list",
+      "capability": "skills:read",
+      "risk": "read"
+    },
+    {
+      "name": "skill_view",
+      "capability": "skills:read",
+      "risk": "read"
+    },
+    {
+      "name": "skill_manage",
+      "capability": "skills:write",
+      "risk": "admin",
+      "persistsInstructions": true,
+      "hardRuleActions": {
+        "argument": "action",
+        "allowWithoutHardRule": [
+          "list",
+          "view"
+        ],
+        "approveOtherwise": true
+      }
+    },
+    {
+      "name": "memory",
+      "capability": "memory:write",
+      "risk": "write",
+      "persistsInstructions": true
+    },
+    {
+      "name": "session_search",
+      "capability": "sessions:read",
+      "risk": "read",
+      "ingestsUntrusted": true
+    },
+    {
+      "name": "todo_list",
+      "capability": "tasks:write",
+      "risk": "write"
+    },
+    {
+      "name": "kanban_*",
+      "capability": "tasks:write",
+      "risk": "write"
+    },
+    {
+      "name": "clarify",
+      "capability": "user:ask",
+      "risk": "read"
+    },
+    {
+      "name": "delegate_task",
+      "capability": "agents:spawn",
+      "risk": "execute"
+    },
+    {
+      "name": "cronjob_manage",
+      "capability": "automations:manage",
+      "risk": "admin"
+    },
+    {
+      "name": "computer_use",
+      "capability": "devices:control",
+      "risk": "admin"
+    },
+    {
+      "name": "ha_*",
+      "capability": "devices:control",
+      "risk": "admin"
+    },
+    {
+      "name": "manage_connections",
+      "capability": "host:admin",
+      "risk": "admin",
+      "hardRule": "approve"
+    },
+    {
+      "name": "discord",
+      "capability": "messages:send",
+      "risk": "external",
+      "ingestsUntrusted": true
+    },
+    {
+      "name": "discord_admin",
+      "capability": "host:admin",
+      "risk": "admin"
+    },
+    {
+      "name": "feishu_*",
+      "capability": "messages:send",
+      "risk": "external",
+      "ingestsUntrusted": true
+    },
+    {
+      "name": "gui_tour",
+      "capability": "tools:read",
+      "risk": "read"
+    },
+    {
+      "name": "show_tip",
+      "capability": "tools:read",
+      "risk": "read"
+    },
+    {
+      "name": "annotate_preview",
+      "capability": "ui:write",
+      "risk": "write"
+    },
+    {
+      "name": "focus_pane",
+      "capability": "ui:write",
+      "risk": "write"
+    },
+    {
+      "name": "react_to_message",
+      "capability": "messages:send",
+      "risk": "external"
+    }
+  ]
+}

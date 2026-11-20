@@ -1,0 +1,17 @@
+{
+  "description": "The machine every vector assumes. Tests must use these values, not the real environment (set HOME, LUMOAUTH_GUARD_HOME, OPENCLAW_STATE_DIR, HERMES_HOME accordingly or inject them). Paths are POSIX.",
+  "home": "/home/ada",
+  "openclaw": {
+    "stateDir": "/home/ada/.openclaw",
+    "workspace": "/home/ada/.openclaw/workspace",
+    "guardHome": "/home/ada/.lumoauth/guard/openclaw",
+    "pluginDir": "/home/ada/.openclaw/npm/projects/lumoauth/node_modules/@lumoauth/openclaw",
+    "cwd": "/home/ada/.openclaw/workspace"
+  },
+  "hermes": {
+    "hermesHome": "/home/ada/.hermes",
+    "guardHome": "/home/ada/.lumoauth/guard/hermes",
+    "pluginDir": "/home/ada/.hermes/plugins/lumoauth",
+    "cwd": "/home/ada/projects/site"
+  }
+}

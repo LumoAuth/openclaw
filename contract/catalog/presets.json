@@ -1,0 +1,21 @@
+{
+  "$comment": "Setup presets (SPEC §8.1): which capabilities the enrollment checklist pre-ticks. Every capability of the host's catalog is offered; the ones listed under a preset are ticked. 'mcp' lists the MCP risks ticked for every configured server (capability mcp:<server>:<risk>:*). Capabilities never ticked by any preset (messages:send, automations:manage, devices:control, secrets:read, host:admin, skills:write) are still offered, unticked: a person grants them on purpose.",
+  "default": "assistant",
+  "presets": {
+    "observer": {
+      "label": "Observer: reads and researches; asks before changing anything",
+      "capabilities": ["files:read", "web:search", "web:fetch", "memory:read", "sessions:read", "agents:read", "user:ask", "tools:read", "media:read", "skills:read", "github:read", "shell:read"],
+      "mcp": ["read"]
+    },
+    "assistant": {
+      "label": "Personal assistant (recommended): works in its workspace and memory; asks before commands, sending, deleting and paying",
+      "capabilities": ["files:read", "files:write", "web:search", "web:fetch", "memory:read", "memory:write", "sessions:read", "sessions:manage", "agents:read", "goals:write", "tasks:write", "user:ask", "tools:read", "ui:write", "media:read", "media:generate", "skills:read", "github:read", "shell:read"],
+      "mcp": ["read", "write"]
+    },
+    "builder": {
+      "label": "Builder: also runs commands, code and sub-agents and drives a browser; still asks before sending, deleting and paying",
+      "capabilities": ["files:read", "files:write", "web:search", "web:fetch", "browser:use", "memory:read", "memory:write", "sessions:read", "sessions:manage", "agents:read", "agents:spawn", "goals:write", "tasks:write", "user:ask", "tools:read", "ui:write", "media:read", "media:generate", "skills:read", "github:read", "shell:read", "shell:exec", "code:execute", "process:manage"],
+      "mcp": ["read", "write"]
+    }
+  }
+}

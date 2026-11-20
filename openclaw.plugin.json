@@ -1,0 +1,24 @@
+{
+  "id": "lumoauth",
+  "name": "LumoAuth Guard",
+  "description": "Checks every tool call before it runs: allowed, sent to you for approval, or blocked, with the policy held in LumoAuth. Protects its own key, OpenClaw's configuration and your credential stores whatever the policy says.",
+  "version": "0.1.0",
+  "skills": ["./skills"],
+  "activation": {
+    "onStartup": true,
+    "onCommands": ["lumoauth"]
+  },
+  "cliCommands": [
+    {
+      "name": "lumoauth",
+      "description": "LumoAuth Guard: set up, check and lock the checks on every tool call",
+      "hasSubcommands": true
+    }
+  ],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  },
+  "uiHints": {}
+}

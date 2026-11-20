@@ -1,0 +1,77 @@
+{
+  "name": "@lumoauth/openclaw",
+  "version": "0.1.0",
+  "description": "LumoAuth Guard for OpenClaw: every tool call your agent makes is allowed, sent to you for approval, or blocked, with the policy held in LumoAuth.",
+  "license": "MIT",
+  "author": "LumoAuth LLC",
+  "homepage": "https://lumoauth.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lumoauth/openclaw.git"
+  },
+  "keywords": [
+    "openclaw",
+    "openclaw-plugin",
+    "lumoauth",
+    "ai-agent",
+    "security",
+    "tool-calls",
+    "approvals",
+    "prompt-injection"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "contract",
+    "skills",
+    "openclaw.plugin.json",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.test.json --noEmit",
+    "test": "node --test --test-reporter=spec \"test/**/*.test.ts\"",
+    "sync-contract": "node scripts/sync-contract.mjs",
+    "check-contract": "node scripts/sync-contract.mjs --check",
+    "prepack": "npm run build"
+  },
+  "openclaw": {
+    "extensions": [
+      "./dist/index.js"
+    ],
+    "compat": {
+      "pluginApi": ">=2026.11.5"
+    },
+    "install": {
+      "npmSpec": "@lumoauth/openclaw",
+      "defaultChoice": "npm",
+      "minHostVersion": ">=2026.11.5"
+    }
+  },
+  "peerDependencies": {
+    "openclaw": ">=2026.11.5"
+  },
+  "peerDependenciesMeta": {
+    "openclaw": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "typescript": "^5.9.3"
+  }
+}

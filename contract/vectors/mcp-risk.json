@@ -1,0 +1,30 @@
+{
+  "description": "SPEC §4.3: risk and ingestsUntrusted of an MCP tool from its server and tool names (catalog/mcp-verbs.json).",
+  "cases": [
+    { "server": "github", "tool": "list_issues", "risk": "read", "ingestsUntrusted": true },
+    { "server": "github", "tool": "listIssues", "risk": "read", "ingestsUntrusted": true },
+    { "server": "github", "tool": "create_issue", "risk": "write", "ingestsUntrusted": false },
+    { "server": "github", "tool": "merge_pull_request", "risk": "external", "ingestsUntrusted": false },
+    { "server": "github", "tool": "delete_repository", "risk": "destructive", "ingestsUntrusted": false },
+    { "server": "gmail", "tool": "send_email", "risk": "external", "ingestsUntrusted": false },
+    { "server": "gmail", "tool": "search_threads", "risk": "read", "ingestsUntrusted": true },
+    { "server": "slack", "tool": "search_messages", "risk": "read", "ingestsUntrusted": true },
+    { "server": "postgres", "tool": "query", "risk": "read", "ingestsUntrusted": false },
+    { "server": "postgres", "tool": "drop_table", "risk": "destructive", "ingestsUntrusted": false },
+    { "server": "vault", "tool": "get_secret", "risk": "admin", "ingestsUntrusted": false },
+    { "server": "team", "tool": "list_members", "risk": "admin", "ingestsUntrusted": false },
+    { "server": "app", "tool": "update_settings", "risk": "admin", "ingestsUntrusted": false },
+    { "server": "linear", "tool": "archive-thread", "risk": "destructive", "ingestsUntrusted": false },
+    { "server": "notion", "tool": "get_page", "risk": "read", "ingestsUntrusted": true },
+    { "server": "files", "tool": "fetch_url", "risk": "read", "ingestsUntrusted": true },
+    { "server": "http", "tool": "HTTPGet", "risk": "read", "ingestsUntrusted": false },
+    { "server": "custom", "tool": "frobnicate", "risk": "execute", "ingestsUntrusted": false },
+    { "server": "custom", "tool": "do.thing", "risk": "execute", "ingestsUntrusted": false },
+    { "server": "stripe", "tool": "create_refund", "risk": "write", "ingestsUntrusted": false },
+    { "server": "stripe", "tool": "refund_payment", "risk": "external", "ingestsUntrusted": false },
+    { "server": "calendar", "tool": "list_events", "risk": "read", "ingestsUntrusted": false },
+    { "server": "my-mail", "tool": "list_events", "risk": "read", "ingestsUntrusted": true },
+    { "server": "shell", "tool": "run_command", "risk": "execute", "ingestsUntrusted": false },
+    { "server": "keys", "tool": "rotate_key", "risk": "admin", "ingestsUntrusted": false }
+  ]
+}

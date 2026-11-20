@@ -1,0 +1,466 @@
+{
+  "description": "SPEC §6.1: the decision for one call, before any approval channel is used. Input: the classification (only the fields that matter), the hard-rule result, and the state. Output: outcome ('allow', 'block', 'approve') and reason code. Receipt decision for a block: 'blocked' for reasons locked, not_set_up, hard_rule, snapshot_unavailable, agent_inactive; 'denied' for not_granted and approvals_off. Defaults: config = SPEC §3.1 defaults; state.locked=false, state.setUp=true, snapshot = {status:'active', ageSeconds: 10, capabilities: []}, tainted=false.",
+  "reasons": {
+    "locked": "Locked by the owner",
+    "not_set_up": "LumoAuth Guard is not set up",
+    "hard_rule": "Protected by a rule that cannot be changed",
+    "hard_rule_approve": "Touches something protected",
+    "snapshot_unavailable": "LumoAuth cannot confirm this agent's permissions",
+    "agent_inactive": "The agent is not active in LumoAuth",
+    "granted": "Granted",
+    "tainted": "After the agent read untrusted content",
+    "not_granted": "Not granted to this agent",
+    "approvals_off": "Needs approval, and approvals are switched off"
+  },
+  "cases": [
+    {
+      "id": "locked-wins",
+      "classification": {
+        "capability": "files:read",
+        "risk": "read"
+      },
+      "hardRule": "deny",
+      "state": {
+        "locked": true
+      },
+      "expected": {
+        "outcome": "block",
+        "reason": "locked"
+      }
+    },
+    {
+      "id": "not-set-up",
+      "classification": {
+        "capability": "files:read",
+        "risk": "read"
+      },
+      "state": {
+        "setUp": false
+      },
+      "expected": {
+        "outcome": "block",
+        "reason": "not_set_up"
+      }
+    },
+    {
+      "id": "hard-deny-beats-grant",
+      "classification": {
+        "capability": "files:read",
+        "risk": "read"
+      },
+      "hardRule": "deny",
+      "snapshot": {
+        "capabilities": [
+          "*"
+        ]
+      },
+      "expected": {
+        "outcome": "block",
+        "reason": "hard_rule"
+      }
+    },
+    {
+      "id": "hard-approve-beats-grant",
+      "classification": {
+        "capability": "files:read",
+        "risk": "read"
+      },
+      "hardRule": "approve",
+      "snapshot": {
+        "capabilities": [
+          "files:*"
+        ]
+      },
+      "expected": {
+        "outcome": "approve",
+        "reason": "hard_rule_approve"
+      }
+    },
+    {
+      "id": "hard-approve-with-approvals-off",
+      "classification": {
+        "capability": "files:read",
+        "risk": "read"
+      },
+      "hardRule": "approve",
+      "config": {
+        "approvals": "off"
+      },
+      "expected": {
+        "outcome": "block",
+        "reason": "approvals_off"
+      }
+    },
+    {
+      "id": "no-snapshot",
+      "classification": {
+        "capability": "files:read",
+        "risk": "read"
+      },
+      "snapshot": null,
+      "expected": {
+        "outcome": "block",
+        "reason": "snapshot_unavailable"
+      }
+    },
+    {
+      "id": "snapshot-in-grace",
+      "classification": {
+        "capability": "files:read",
+        "risk": "read"
+      },
+      "snapshot": {
+        "capabilities": [
+          "files:read"
+        ],
+        "ageSeconds": 359
+      },
+      "expected": {
+        "outcome": "allow",
+        "reason": "granted"
+      }
+    },
+    {
+      "id": "snapshot-past-grace",
+      "classification": {
+        "capability": "files:read",
+        "risk": "read"
+      },
+      "snapshot": {
+        "capabilities": [
+          "files:read"
+        ],
+        "ageSeconds": 361
+      },
+      "expected": {
+        "outcome": "block",
+        "reason": "snapshot_unavailable"
+      }
+    },
+    {
+      "id": "agent-suspended",
+      "classification": {
+        "capability": "files:read",
+        "risk": "read"
+      },
+      "snapshot": {
+        "capabilities": [
+          "files:read"
+        ],
+        "status": "suspended"
+      },
+      "expected": {
+        "outcome": "block",
+        "reason": "agent_inactive"
+      }
+    },
+    {
+      "id": "granted-exact",
+      "classification": {
+        "capability": "files:write",
+        "risk": "write"
+      },
+      "snapshot": {
+        "capabilities": [
+          "files:write"
+        ]
+      },
+      "expected": {
+        "outcome": "allow",
+        "reason": "granted"
+      }
+    },
+    {
+      "id": "granted-wildcard",
+      "classification": {
+        "capability": "mcp:github:read:list_issues",
+        "risk": "read"
+      },
+      "snapshot": {
+        "capabilities": [
+          "mcp:github:read:*"
+        ]
+      },
+      "expected": {
+        "outcome": "allow",
+        "reason": "granted"
+      }
+    },
+    {
+      "id": "wildcard-other-risk",
+      "classification": {
+        "capability": "mcp:github:destructive:delete_repository",
+        "risk": "destructive"
+      },
+      "snapshot": {
+        "capabilities": [
+          "mcp:github:read:*",
+          "mcp:github:write:*"
+        ]
+      },
+      "expected": {
+        "outcome": "approve",
+        "reason": "not_granted"
+      }
+    },
+    {
+      "id": "granted-case-and-dot",
+      "classification": {
+        "capability": "files:read",
+        "risk": "read"
+      },
+      "snapshot": {
+        "capabilities": [
+          "Files.Read"
+        ]
+      },
+      "expected": {
+        "outcome": "allow",
+        "reason": "granted"
+      }
+    },
+    {
+      "id": "not-granted-asks",
+      "classification": {
+        "capability": "shell:exec",
+        "risk": "execute"
+      },
+      "snapshot": {
+        "capabilities": [
+          "files:read"
+        ]
+      },
+      "expected": {
+        "outcome": "approve",
+        "reason": "not_granted"
+      }
+    },
+    {
+      "id": "not-granted-block-mode",
+      "classification": {
+        "capability": "shell:exec",
+        "risk": "execute"
+      },
+      "config": {
+        "onUngranted": "block"
+      },
+      "expected": {
+        "outcome": "block",
+        "reason": "not_granted"
+      }
+    },
+    {
+      "id": "not-granted-approvals-off",
+      "classification": {
+        "capability": "shell:exec",
+        "risk": "execute"
+      },
+      "config": {
+        "approvals": "off"
+      },
+      "expected": {
+        "outcome": "block",
+        "reason": "approvals_off"
+      }
+    },
+    {
+      "id": "tainted-external",
+      "classification": {
+        "capability": "messages:send",
+        "risk": "external"
+      },
+      "snapshot": {
+        "capabilities": [
+          "messages:send"
+        ]
+      },
+      "tainted": true,
+      "expected": {
+        "outcome": "approve",
+        "reason": "tainted"
+      }
+    },
+    {
+      "id": "tainted-write-not-escalated",
+      "classification": {
+        "capability": "files:write",
+        "risk": "write"
+      },
+      "snapshot": {
+        "capabilities": [
+          "files:write"
+        ]
+      },
+      "tainted": true,
+      "expected": {
+        "outcome": "allow",
+        "reason": "granted"
+      }
+    },
+    {
+      "id": "tainted-persists-instructions",
+      "classification": {
+        "capability": "memory:write",
+        "risk": "write",
+        "persistsInstructions": true
+      },
+      "snapshot": {
+        "capabilities": [
+          "memory:write"
+        ]
+      },
+      "tainted": true,
+      "expected": {
+        "outcome": "approve",
+        "reason": "tainted"
+      }
+    },
+    {
+      "id": "tainted-egress-default",
+      "classification": {
+        "capability": "web:fetch",
+        "risk": "read",
+        "egress": true
+      },
+      "snapshot": {
+        "capabilities": [
+          "web:fetch"
+        ]
+      },
+      "tainted": true,
+      "expected": {
+        "outcome": "allow",
+        "reason": "granted"
+      }
+    },
+    {
+      "id": "tainted-egress-strict",
+      "classification": {
+        "capability": "web:fetch",
+        "risk": "read",
+        "egress": true
+      },
+      "snapshot": {
+        "capabilities": [
+          "web:fetch"
+        ]
+      },
+      "tainted": true,
+      "config": {
+        "taint": {
+          "enabled": true,
+          "windowSeconds": 1800,
+          "escalate": [
+            "external",
+            "execute",
+            "egress"
+          ]
+        }
+      },
+      "expected": {
+        "outcome": "approve",
+        "reason": "tainted"
+      }
+    },
+    {
+      "id": "tainted-execute-strict",
+      "classification": {
+        "capability": "shell:exec",
+        "risk": "execute"
+      },
+      "snapshot": {
+        "capabilities": [
+          "shell:exec"
+        ]
+      },
+      "tainted": true,
+      "config": {
+        "taint": {
+          "enabled": true,
+          "windowSeconds": 1800,
+          "escalate": [
+            "external",
+            "execute"
+          ]
+        }
+      },
+      "expected": {
+        "outcome": "approve",
+        "reason": "tainted"
+      }
+    },
+    {
+      "id": "taint-disabled",
+      "classification": {
+        "capability": "messages:send",
+        "risk": "external"
+      },
+      "snapshot": {
+        "capabilities": [
+          "messages:send"
+        ]
+      },
+      "tainted": true,
+      "config": {
+        "taint": {
+          "enabled": false,
+          "windowSeconds": 1800,
+          "escalate": [
+            "external"
+          ]
+        }
+      },
+      "expected": {
+        "outcome": "allow",
+        "reason": "granted"
+      }
+    },
+    {
+      "id": "star-grants-everything-but-hard-rules",
+      "classification": {
+        "capability": "tool:acme_widget",
+        "risk": "execute"
+      },
+      "snapshot": {
+        "capabilities": [
+          "*"
+        ]
+      },
+      "expected": {
+        "outcome": "allow",
+        "reason": "granted"
+      }
+    },
+    {
+      "id": "suspended-beats-hard-approve",
+      "classification": {
+        "capability": "files:read",
+        "risk": "read"
+      },
+      "hardRule": "approve",
+      "snapshot": {
+        "capabilities": [
+          "files:read"
+        ],
+        "status": "suspended"
+      },
+      "expected": {
+        "outcome": "block",
+        "reason": "agent_inactive"
+      }
+    },
+    {
+      "id": "no-snapshot-beats-hard-approve",
+      "classification": {
+        "capability": "files:read",
+        "risk": "read"
+      },
+      "hardRule": "approve",
+      "snapshot": null,
+      "expected": {
+        "outcome": "block",
+        "reason": "snapshot_unavailable"
+      }
+    }
+  ]
+}

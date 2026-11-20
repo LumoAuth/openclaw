@@ -1,0 +1,137 @@
+{
+  "$comment": "Every built-in capability that a host catalog may name, with the label shown on the LumoAuth enrollment page and its risk (SPEC §4.2). MCP capabilities (mcp:<server>:<risk>:*) are generated per server from mcpRiskLabels.",
+  "capabilities": {
+    "files:read": {
+      "label": "Read files",
+      "risk": "read"
+    },
+    "files:write": {
+      "label": "Create and change files",
+      "risk": "write"
+    },
+    "web:search": {
+      "label": "Search the web",
+      "risk": "read"
+    },
+    "web:fetch": {
+      "label": "Open web pages",
+      "risk": "read"
+    },
+    "browser:use": {
+      "label": "Control a web browser (click, type, submit forms)",
+      "risk": "external"
+    },
+    "memory:read": {
+      "label": "Read its memory",
+      "risk": "read"
+    },
+    "memory:write": {
+      "label": "Change its memory and standing instructions",
+      "risk": "write"
+    },
+    "sessions:read": {
+      "label": "Read other conversations and sessions",
+      "risk": "read"
+    },
+    "sessions:manage": {
+      "label": "Start and manage sessions",
+      "risk": "write"
+    },
+    "messages:send": {
+      "label": "Send messages on your behalf",
+      "risk": "external"
+    },
+    "agents:read": {
+      "label": "List agents and goals",
+      "risk": "read"
+    },
+    "agents:spawn": {
+      "label": "Start sub-agents",
+      "risk": "execute"
+    },
+    "goals:write": {
+      "label": "Create and update goals and tasks",
+      "risk": "write"
+    },
+    "tasks:write": {
+      "label": "Keep to-do lists and boards",
+      "risk": "write"
+    },
+    "user:ask": {
+      "label": "Ask you a question",
+      "risk": "read"
+    },
+    "tools:read": {
+      "label": "Look up available tools",
+      "risk": "read"
+    },
+    "ui:write": {
+      "label": "Show widgets, canvases and dashboards",
+      "risk": "write"
+    },
+    "media:read": {
+      "label": "Look at images, video, PDFs and transcripts",
+      "risk": "read"
+    },
+    "media:generate": {
+      "label": "Generate images, audio and video",
+      "risk": "write"
+    },
+    "skills:read": {
+      "label": "Read skills",
+      "risk": "read"
+    },
+    "skills:write": {
+      "label": "Create and change skills",
+      "risk": "admin"
+    },
+    "shell:exec": {
+      "label": "Run shell commands",
+      "risk": "execute"
+    },
+    "shell:read": {
+      "label": "Read terminal output",
+      "risk": "read"
+    },
+    "code:execute": {
+      "label": "Run code",
+      "risk": "execute"
+    },
+    "process:manage": {
+      "label": "Manage background processes",
+      "risk": "execute"
+    },
+    "automations:manage": {
+      "label": "Create and change scheduled jobs",
+      "risk": "admin"
+    },
+    "devices:control": {
+      "label": "Control your computer, phone and paired devices",
+      "risk": "admin"
+    },
+    "secrets:read": {
+      "label": "Read stored secrets and passwords",
+      "risk": "admin"
+    },
+    "host:admin": {
+      "label": "Change the agent host (update, restart, connections)",
+      "risk": "admin"
+    },
+    "github:read": {
+      "label": "Read the linked GitHub identity",
+      "risk": "read"
+    },
+    "github:publish": {
+      "label": "Publish to GitHub",
+      "risk": "external"
+    }
+  },
+  "mcpRiskLabels": {
+    "read": "{server}: read-only tools",
+    "write": "{server}: tools that create or change data",
+    "external": "{server}: tools that send or publish",
+    "destructive": "{server}: tools that delete",
+    "execute": "{server}: tools that run code or are not recognised",
+    "admin": "{server}: tools that change settings or permissions"
+  }
+}
