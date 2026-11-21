@@ -1,6 +1,6 @@
 {
   "name": "@lumoauth/openclaw",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "LumoAuth Guard for OpenClaw: every tool call your agent makes is allowed, sent to you for approval, or blocked, with the policy held in LumoAuth.",
   "license": "MIT",
   "author": "LumoAuth LLC",
