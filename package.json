@@ -56,6 +56,9 @@
     "compat": {
       "pluginApi": ">=2026.11.5"
     },
+    "build": {
+      "openclawVersion": "2026.11.5"
+    },
     "install": {
       "npmSpec": "@lumoauth/openclaw",
       "defaultChoice": "npm",

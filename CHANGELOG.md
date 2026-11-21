@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Ready for ClawHub: `package.json` declares the OpenClaw release that the plugin is built and tested against (`openclaw.build.openclawVersion`: 2026.11.5), which ClawHub requires.
+
 ## 0.1.0 — 2026-11-20
 
 First release of LumoAuth Guard for OpenClaw (plugin id `lumoauth`), built to the LumoAuth Guard contract v1.
