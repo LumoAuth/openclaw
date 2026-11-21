@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.1.1 — 2026-11-20
+
 - Ready for ClawHub: `package.json` declares the OpenClaw release that the plugin is built and tested against (`openclaw.build.openclawVersion`: 2026.11.5), which ClawHub requires.
 
 ## 0.1.0 — 2026-11-20
